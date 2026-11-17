@@ -22,7 +22,7 @@ USER root
 # companion image. The admin PASSWORD is a generated secret — see
 # template-vars.json. MAUTIC_API_ENABLED does NOT work as an env var (Mautic
 # only maps a fixed set of MAUTIC_* env vars in config.php; api_enabled is a
-# local.php parameter) — the entrypoint enables the API by writing it into
+# local.php parameters) — the entrypoint enables the API + Basic auth by writing them into
 # local.php after install instead.
 ENV TZ=UTC \
     MAUTIC_DB_PORT=3306 \

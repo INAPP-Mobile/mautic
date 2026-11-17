@@ -20,9 +20,10 @@
 #   ${{RAILWAY_PUBLIC_DOMAIN}} template expression — it resolves to a bare
 #   https:// on first deploy, before any domain exists); if the install
 #   happened before a domain existed, the URL is fixed up on a later boot.
-# - Enables the REST API (api_enabled is a local.php parameter, default
-#   false; MAUTIC_API_ENABLED as an env var does nothing — Mautic maps only
-#   a fixed set of MAUTIC_* env vars in config.php) so contacts/segments can
+# - Enables the REST API with HTTP Basic auth (api_enabled and
+#   api_enable_basic_auth are local.php parameters, both default false;
+#   MAUTIC_API_ENABLED as an env var does nothing — Mautic maps only a
+#   fixed set of MAUTIC_* env vars in config.php) so contacts/segments can
 #   be managed over HTTP Basic auth with the admin credentials.
 # - Runs Mautic's own cron jobs in-container (upstream's /templates/
 #   mautic_cron: segments + campaigns every 15 min) via the cron daemon,
@@ -126,7 +127,8 @@ if ! is_installed; then
 fi
 
 # 7. Fix up site_url if the install happened before a domain existed, and
-# enable the REST API (local.php parameter, default false).
+# enable the REST API with HTTP Basic auth (local.php parameters, both
+# default false).
 if is_installed; then
   if [ -n "${RAILWAY_PUBLIC_DOMAIN:-}" ]; then
     CURRENT_URL="$(php -r "include('${LOCAL_PHP}'); echo \$parameters['site_url'] ?? '';")"
@@ -139,10 +141,12 @@ if is_installed; then
     \$f = '${LOCAL_PHP}';
     include(\$f);
     \$p = \$parameters;
-    if (empty(\$p['api_enabled'])) {
-      \$p['api_enabled'] = 1;
+    \$changed = false;
+    if (empty(\$p['api_enabled'])) { \$p['api_enabled'] = 1; \$changed = true; }
+    if (empty(\$p['api_enable_basic_auth'])) { \$p['api_enable_basic_auth'] = 1; \$changed = true; }
+    if (\$changed) {
       file_put_contents(\$f, \"<?php\n\\\$parameters = \".var_export(\$p, true).\";\n\");
-      echo \"[mautic] Enabled the REST API (api_enabled=1).\n\";
+      echo \"[mautic] Enabled the REST API with HTTP Basic auth (api_enabled=1, api_enable_basic_auth=1).\n\";
     }
   "
 fi

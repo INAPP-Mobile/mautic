@@ -14,7 +14,7 @@ Screenshot: upstream Mautic documentation (mautic/documentation, `en/dashboard/m
 
 ## Deploy and Host
 
-One click deploys Mautic 7.2.2 (official `mautic/mautic` image, pinned by digest) plus a MySQL 8.4 companion service. The deploy form has one generated field — an admin password — and nothing else to fill in. On first boot the admin account (`admin` / `admin@example.com` + your generated password) is created automatically by the `mautic:install` CLI, the REST API is enabled for the admin credentials, and the site URL is derived from the live public domain. Log in and start with Contacts: add a contact, put it in a segment, and build your first campaign.
+One click deploys Mautic 7.2.2 (official `mautic/mautic` image, pinned by digest) plus a MySQL 8.4 companion service. The deploy form has one generated field — an admin password — and nothing else to fill in. On first boot the admin account (`admin` / `admin@example.com` + your generated password) is created automatically by the `mautic:install` CLI, the REST API is enabled with HTTP Basic auth for the admin credentials, and the site URL is derived from the live public domain. Log in and start with Contacts: add a contact, put it in a segment, and build your first campaign.
 
 ## Why Deploy
 
@@ -51,7 +51,7 @@ One click deploys Mautic 7.2.2 (official `mautic/mautic` image, pinned by digest
 | `DOCKER_MAUTIC_LOAD_TEST_DATA` | `false` (image default) | Load demo fixtures on install. Leave `false` — it overwrites the seeded admin credentials. |
 | `PORT` | injected by Railway | Mapped onto Apache on every boot. |
 
-Any other Mautic setting can be set as an environment variable with the `MAUTIC_` prefix (see the [upstream image README](https://github.com/mautic/docker-mautic#readme)). The REST API is enabled on first boot (`api_enabled=1` in `local.php`); use HTTP Basic auth with the admin credentials against `/api/contacts`, `/api/segments`, `/api/campaigns`, and the other endpoints documented at [developer.mautic.org](https://developer.mautic.org/).
+Any other Mautic setting can be set as an environment variable with the `MAUTIC_` prefix (see the [upstream image README](https://github.com/mautic/docker-mautic#readme)). The REST API is enabled with HTTP Basic auth on first boot (`api_enabled=1` + `api_enable_basic_auth=1` in `local.php`); use HTTP Basic auth with the admin credentials against `/api/contacts`, `/api/segments`, `/api/campaigns`, and the other endpoints documented at [developer.mautic.org](https://developer.mautic.org/).
 
 ### Deployment Dependencies
 
