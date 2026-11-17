@@ -1,8 +1,8 @@
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.com/deploy/mautic?utm_campaign=mautic)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.com/deploy/mautic-3?utm_campaign=mautic)
 
 ![Mautic dashboard, live capture from a one-click Railway deploy](https://raw.githubusercontent.com/INAPP-Mobile/mautic/main/assets/mautic-dashboard-live.png)
 
-Screenshot: upstream Mautic documentation (mautic/documentation, `en/dashboard/media/add-widget.jpg`) — the dashboard with the sent/read email chart and the contact map. The deployed UI is Mautic 7.2.2.
+Screenshot: live capture of the deployed dashboard (Mautic 7.2.2) from a one-click Railway install — the Contacts Created chart shows the first test contact.
 
 # Deploy and Host
 
