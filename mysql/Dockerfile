@@ -1,4 +1,4 @@
-# MySQL 8.0 companion for the Mautic Railway template.
+# MySQL 8.4 companion for the Mautic Railway template.
 #
 # Bakes every constant as ENV because Railway's `templates create` only
 # carries ${{...}} expressions into template defaults — literals would land
@@ -12,10 +12,13 @@
 # is absent, so a direct mount at /var/lib/mysql works despite the volume's
 # lost+found (initdb's non-empty-dir refusal is a Postgres-only gotcha).
 #
-# Digest pinned from the mysql:8.0 tag (a moving tag); the manifest-list
-# digest is the pin. Mautic 7 requires MySQL 8.0+ (or MariaDB 10.6+).
+# Digest pinned from the mysql:8.4 tag (a moving tag); the manifest-list
+# digest is the pin. Mautic 7 REQUIRES MySQL 8.4.0+ (or MariaDB 10.11.0+) —
+# proven in e2e 2026-11-17: mautic:install refuses MySQL 8.0.46 with
+# "Your database version (8.0.46) is too old for Mautic to work correctly."
+# Do NOT downgrade this to 8.0.
 
-FROM mysql:8.0@sha256:7dcddc01f13bab2f15cde676d44d01f61fc9f99fe7785e86196dfc07d358ae2b
+FROM mysql:8.4@sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902
 
 ENV MYSQL_DATABASE=mautic \
     MYSQL_USER=mautic

@@ -6,11 +6,11 @@ Screenshot: upstream Mautic documentation (mautic/documentation, `en/dashboard/m
 
 # Deploy and Host
 
-Mautic is the open-source marketing automation platform — the self-hosted alternative to HubSpot and Mailchimp. Track contacts, build segments, design emails, and run multi-step campaigns with lead scoring, all on infrastructure you control. One click deploys the official image (mautic/mautic v7.2.2, GPL-3.0) with a MySQL 8 companion: the admin account is seeded on first boot, Mautic's own cron jobs run in-container, and contacts, segments, and media survive redeploys. The deploy form has one generated field — an admin password — and nothing else to fill in. On first boot the admin account (`admin` / `admin@example.com` + your generated password) and the REST API are enabled automatically; log in and start with Contacts.
+Mautic is the open-source marketing automation platform — the self-hosted alternative to HubSpot and Mailchimp. Track contacts, build segments, design emails, and run multi-step campaigns with lead scoring, all on infrastructure you control. One click deploys the official image (mautic/mautic v7.2.2, GPL-3.0) with a MySQL 8.4 companion: the admin account is seeded on first boot, Mautic's own cron jobs run in-container, and contacts, segments, and media survive redeploys. The deploy form has one generated field — an admin password — and nothing else to fill in. On first boot the admin account (`admin` / `admin@example.com` + your generated password) and the REST API are enabled automatically; log in and start with Contacts.
 
 ## About Hosting
 
-Mautic runs as one PHP + Apache service from the official image, pinned by digest, plus a MySQL 8.0 companion service. The config (`local.php`), logs, and uploaded media live on a Railway volume (`/data`) and the MySQL data on its own volume (`/var/lib/mysql`); both survive redeploys. Railway's injected `PORT` is mapped onto Apache on every boot, and the healthcheck is `/s/login` (unauthenticated, 200). Mautic's own cron schedule (segments and campaigns every 15 minutes) runs inside the web container from the upstream crontab, so automations fire with no separate cron service. The stock image never installs itself — this wrapper runs the `mautic:install` CLI on first boot and derives the site URL from the live public domain. The marketplace leader sits at 72% health; this template fixes the usual failure modes (pinned digest, PORT remap, volume persistence for all four upstream dirs, auto-seeded admin, in-container cron).
+Mautic runs as one PHP + Apache service from the official image, pinned by digest, plus a MySQL 8.4 companion service. The config (`local.php`), logs, and uploaded media live on a Railway volume (`/data`) and the MySQL data on its own volume (`/var/lib/mysql`); both survive redeploys. Railway's injected `PORT` is mapped onto Apache on every boot, and the healthcheck is `/s/login` (unauthenticated, 200). Mautic's own cron schedule (segments and campaigns every 15 minutes) runs inside the web container from the upstream crontab, so automations fire with no separate cron service. The stock image never installs itself — this wrapper runs the `mautic:install` CLI on first boot and derives the site URL from the live public domain. The marketplace leader sits at 72% health; this template fixes the usual failure modes (pinned digest, PORT remap, volume persistence for all four upstream dirs, auto-seeded admin, in-container cron).
 
 ## Why Deploy
 
@@ -30,7 +30,7 @@ Mautic runs as one PHP + Apache service from the official image, pinned by diges
 
 ### Deployment Dependencies
 
-- **Runtime:** Mautic 7.2.2 (PHP 8.4 + Apache) + MySQL 8.0 companion; ~512 MB PHP limit, MySQL ~128 MB buffer pool. Fits the Hobby plan.
+- **Runtime:** Mautic 7.2.2 (PHP 8.4 + Apache) + MySQL 8.4 companion; ~512 MB PHP limit, MySQL ~128 MB buffer pool. Fits the Hobby plan.
 - **Port:** 8080 by default, mapped from Railway's injected `PORT` onto Apache on every boot.
 - **Persistence:** one Railway volume at `/data` (Mautic config, logs, uploaded media/files + images) and one volume at `/var/lib/mysql` (MySQL data).
 - **Healthcheck:** `/s/login` (unauthenticated, 200). The app root `/` redirects to it, so it cannot be the platform probe.

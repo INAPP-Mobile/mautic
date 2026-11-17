@@ -1,6 +1,6 @@
 # Mautic
 
-Mautic is the open-source marketing automation platform — the self-hosted alternative to HubSpot and Mailchimp. Track contacts, build segments, design emails, and run multi-step campaigns with lead scoring, all on infrastructure you control. One click deploys the official image (mautic/mautic v7.2.2, GPL-3.0) with a MySQL 8 companion: the admin account is seeded on first boot, Mautic's own cron jobs run in-container, and contacts, segments, and media survive redeploys on a Railway volume.
+Mautic is the open-source marketing automation platform — the self-hosted alternative to HubSpot and Mailchimp. Track contacts, build segments, design emails, and run multi-step campaigns with lead scoring, all on infrastructure you control. One click deploys the official image (mautic/mautic v7.2.2, GPL-3.0) with a MySQL 8.4 companion: the admin account is seeded on first boot, Mautic's own cron jobs run in-container, and contacts, segments, and media survive redeploys on a Railway volume.
 
 ![Mautic dashboard with email chart and contact map](assets/mautic-dashboard.jpg)
 
@@ -14,7 +14,7 @@ Screenshot: upstream Mautic documentation (mautic/documentation, `en/dashboard/m
 
 ## Deploy and Host
 
-One click deploys Mautic 7.2.2 (official `mautic/mautic` image, pinned by digest) plus a MySQL 8.0 companion service. The deploy form has one generated field — an admin password — and nothing else to fill in. On first boot the admin account (`admin` / `admin@example.com` + your generated password) is created automatically by the `mautic:install` CLI, the REST API is enabled for the admin credentials, and the site URL is derived from the live public domain. Log in and start with Contacts: add a contact, put it in a segment, and build your first campaign.
+One click deploys Mautic 7.2.2 (official `mautic/mautic` image, pinned by digest) plus a MySQL 8.4 companion service. The deploy form has one generated field — an admin password — and nothing else to fill in. On first boot the admin account (`admin` / `admin@example.com` + your generated password) is created automatically by the `mautic:install` CLI, the REST API is enabled for the admin credentials, and the site URL is derived from the live public domain. Log in and start with Contacts: add a contact, put it in a segment, and build your first campaign.
 
 ## Why Deploy
 
@@ -55,7 +55,7 @@ Any other Mautic setting can be set as an environment variable with the `MAUTIC_
 
 ### Deployment Dependencies
 
-- **Runtime:** Mautic 7.2.2 (PHP 8.4 + Apache) + MySQL 8.0 companion; ~512 MB PHP limit, MySQL ~128 MB buffer pool. Fits the Hobby plan.
+- **Runtime:** Mautic 7.2.2 (PHP 8.4 + Apache) + MySQL 8.4 companion; ~512 MB PHP limit, MySQL ~128 MB buffer pool. Fits the Hobby plan.
 - **Port:** 8080 by default, mapped from Railway's injected `PORT` onto Apache on every boot.
 - **Persistence:** one Railway volume at `/data` (Mautic config `local.php`, logs, uploaded media/files + images) and one volume at `/var/lib/mysql` (MySQL data). Both survive redeploys.
 - **Healthcheck:** `/s/login` (unauthenticated, 200 — the login page). The app root `/` redirects to it, so it cannot be the platform probe.
