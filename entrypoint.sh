@@ -47,9 +47,14 @@ is_installed() {
   php -r "include('${LOCAL_PHP}'); exit(!empty(\$parameters['db_driver']) && !empty(\$parameters['site_url']) ? 0 : 1);"
 }
 
-# 1. Apache onto $PORT.
+# 1. Apache onto $PORT. The php:apache base ships BOTH mpm_event and
+# mpm_prefork enabled; Apache refuses to start (AH00534: more than one MPM
+# loaded) until one is disabled. mod_php needs prefork — same fix as the
+# FileGator wrapper (upstream ships both MPMs enabled).
 sed -i "s/^Listen 80$/Listen ${PORT}/" /etc/apache2/ports.conf
 sed -i "s|<VirtualHost \*:80>|<VirtualHost *:${PORT}>|" /etc/apache2/sites-available/000-default.conf
+a2dismod mpm_event >/dev/null 2>&1 || true
+a2enmod mpm_prefork >/dev/null 2>&1 || true
 
 # 2. The four upstream persistent dirs -> /data (single Railway volume).
 mkdir -p /data/config /data/var-logs /data/media-files /data/media-images
