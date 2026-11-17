@@ -43,6 +43,24 @@ PORT="${PORT:-8080}"
 
 LOCAL_PHP=/var/www/html/config/local.php
 
+# Upstream entrypoint env (docker-entrypoint.sh sets these, but it only runs
+# at the very end — step 5 below invokes the upstream check scripts
+# directly, so export the same defaults here first. Without them the volume
+# and env checks are vacuous (empty MAUTIC_VOLUMES / REQUIRED_MAUTIC_VARIABLES
+# lists) and check_local_php_exists writes the template to "/local.php" at
+# the container root instead of the app config dir.)
+export MAUTIC_VOLUME_CONFIG="${MAUTIC_VOLUME_CONFIG:-/var/www/html/config}"
+export MAUTIC_VOLUME_LOGS="${MAUTIC_VOLUME_LOGS:-/var/www/html/var/logs}"
+export MAUTIC_VOLUME_MEDIA="${MAUTIC_VOLUME_MEDIA:-/var/www/html/docroot/media}"
+export MAUTIC_VOLUME_FILES="${MAUTIC_VOLUME_FILES:-/var/www/html/docroot/media/files}"
+export MAUTIC_VOLUME_IMAGES="${MAUTIC_VOLUME_IMAGES:-/var/www/html/docroot/media/images}"
+export MAUTIC_VAR="${MAUTIC_VAR:-/var/www/html/var}"
+export MAUTIC_CONSOLE="${MAUTIC_CONSOLE:-/var/www/html/bin/console}"
+export MAUTIC_WWW_USER="${MAUTIC_WWW_USER:-www-data}"
+export MAUTIC_WWW_GROUP="${MAUTIC_WWW_GROUP:-www-data}"
+export MAUTIC_VOLUMES="${MAUTIC_VOLUME_CONFIG} ${MAUTIC_VAR} ${MAUTIC_VOLUME_LOGS} ${MAUTIC_VOLUME_MEDIA} ${MAUTIC_VOLUME_FILES} ${MAUTIC_VOLUME_IMAGES}"
+export REQUIRED_MAUTIC_VARIABLES="MAUTIC_DB_HOST MAUTIC_DB_USER MAUTIC_DB_PASSWORD DOCKER_MAUTIC_ROLE"
+
 is_installed() {
   php -r "include('${LOCAL_PHP}'); exit(!empty(\$parameters['db_driver']) && !empty(\$parameters['site_url']) ? 0 : 1);"
 }
