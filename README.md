@@ -2,7 +2,7 @@
 
 Mautic is the open-source marketing automation platform — the self-hosted alternative to HubSpot and Mailchimp. Track contacts, build segments, design emails, and run multi-step campaigns with lead scoring, all on infrastructure you control. One click deploys the official image (mautic/mautic v7.2.2, GPL-3.0) with a MySQL 8.4 companion: the admin account is seeded on first boot, Mautic's own cron jobs run in-container, and contacts, segments, and media survive redeploys on a Railway volume.
 
-![Mautic dashboard with email chart and contact map](assets/mautic-dashboard.jpg)
+![Mautic dashboard, live capture from a one-click Railway deploy](assets/mautic-dashboard-live.png)
 
 Screenshot: upstream Mautic documentation (mautic/documentation, `en/dashboard/media/add-widget.jpg`) — the dashboard with the sent/read email chart and the contact map. The deployed UI is Mautic 7.2.2.
 
